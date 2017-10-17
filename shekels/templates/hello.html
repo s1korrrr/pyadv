@@ -1,0 +1,13 @@
+{% extends "szablon.html" %}
+
+{% block title %}Hello{% endblock %}
+
+{% block tresc %}
+<p>To jest tresc</p>
+
+{% for u in users %}
+    Name: {{ u.name }}<br>
+    Full name: {{ u.fullname }} <br>
+{% endfor %}
+
+{% endblock %}

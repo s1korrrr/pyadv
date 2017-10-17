@@ -1,0 +1,13 @@
+{% extends "main_tpl.html" %}
+
+{% block title %}User list{% endblock %}
+
+{% block tresc %}
+<p>List of users</p>
+
+{% for u in users %}
+    Name: {{ u.login }}<br>
+    Full name: {{ u.full_name }} <br>
+{% endfor %}
+
+{% endblock %}

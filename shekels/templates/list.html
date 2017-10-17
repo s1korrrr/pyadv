@@ -1,0 +1,13 @@
+{% extends "main_tpl.html" %}
+
+{% block title %}Expense list{% endblock %}
+
+{% block tresc %}
+    <p>List of expenses</p>
+    <ul>
+        {% for x in expenses %}
+            <li>{{ x.name }} {{ x.price }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

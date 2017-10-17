@@ -1,0 +1,15 @@
+W ramach pracy domowej porządki + nowe funkcjonalnosci
+
+1. Przeniescie "include" z kotkiem z glownego szablonu (szablon.html), tak aby wyswietlal sie tylko na stronie glownej
+(index).
+2. Stworzcie nowa strone (list) ktora bedzie wyswietlac wszystkie wydatki. Chodzi o to aby stworzyc nowa strone,
+i przeniesc tam logike ze strony glownej (index) ktora wyswietla wszystkie wydatki. Dzieki temu na glownej stronie
+zobaczymy kotka i przywitanie, a na nowej stronie bedzie mozna ogladac wydatki.
+3. Zmiencie strone hello na user_list (zarowno linki, jak i nazwe funkcji i nazwe szablonu)
+4. Zmiencie aplikacje tak, aby strony user_list, list oraz add byly dostepne tylko po zalogowaniu (@login_required).
+5. Stworzcie nowa strone (register) z formularzem do zarejestrowania. Niech uzytkownik musi podac login, full name,
+oraz 2 razy podac haslo (hasla musza sie zgadzac). Aplikacja nie moze pozwolic na zalozenie uzytkownika dla loginu
+ktory juz istnieje.
+6. Wydzielcie kawalek strony z wszystkimi linkami do wspolnego szablonu _links.html i umiescie w szablonie "szablon.html"
+w taki sposob aby wyswietlal sie na kazdej stronie.
+

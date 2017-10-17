@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Super page - {% endblock %}</title>
+</head>
+<body>
+
+<span>Links: </span>
+{% include "_links.html" %}
+
+{% if current_user.is_authenticated %}
+    <p>You are logged in as {{ current_user.login }}</p>
+{% endif %}
+
+{% block tresc %}
+    <p>Default content</p>
+{% endblock %}
+</body>
+</html>

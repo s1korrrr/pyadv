@@ -1,0 +1,7 @@
+Praca domowa:
+
+
+Dopisać kod do klasy ExpenseData tak aby testy które dopisałem przechodziły na zielono:)
+Aby to zrobić należy uzupełnić metodę search() tak aby zwracała tylko wyniki produktów których nazwa została
+przekazana w parametrze oraz aby każda z metod rzucała wyjątek UnableToOpenDataFileException (Wyjątek jest już
+przygotowany) w przypadku gdy podana ścieżka do pliku jest katalogiem.

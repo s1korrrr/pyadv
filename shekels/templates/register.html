@@ -1,0 +1,25 @@
+{% extends "main_tpl.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block tresc %}
+<form method="post">
+    {{ form.csrf_token }}
+    <span>Login</span>{{ form.login }}<br>
+    <span>Full name</span>{{ form.full_name }}<br>
+    <span>Password</span>{{ form.password}}<br>
+    <span>Repeat password</span>{{ form.password2}}<br>
+    <button type="submit">Register</button>
+</form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+{% endblock %}
