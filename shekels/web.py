@@ -1,3 +1,4 @@
+import flask_login
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, login_required, login_user
@@ -14,6 +15,9 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+login_manager.login_view = "login"
+login_manager.login_message = "Please Log in!"
 
 db = DB('expenses.db')
 db.create_db()
@@ -40,6 +44,7 @@ def login():
             if user.password == form.password.data:
                 login_user(user)
                 flash('Welcome {}!'.format(user.login))
+
                 return redirect(url_for('index'))
             else:
                 flash(message='bad login')
@@ -105,6 +110,13 @@ def register():
         return redirect(url_for('index'))
 
     return render_template('register.html', form=form)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    flask_login.logout_user()
+    return redirect(url_for("index"))
 
 
 if __name__ == '__main__':
