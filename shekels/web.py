@@ -1,23 +1,27 @@
-import flask_login
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request,\
+    redirect, url_for, flash, abort
 from flask_debugtoolbar import DebugToolbarExtension
-from flask_login import LoginManager, login_required, login_user
+from flask_login import LoginManager, \
+    login_required, login_user, logout_user
 from sqlalchemy.orm.exc import NoResultFound
 
 from shekels.db import DB, User, Expense
 from shekels.forms import ExpenseForm, LoginForm, RegisterForm
 
+import logging
+import shekels.logger
+shekels.logger.setup()
+
 app = Flask(__name__)
 app.secret_key = 'fdsafhsdalkghsdahg'
-app.debug = True
+app.debug = False
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 toolbar = DebugToolbarExtension(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
-
 login_manager.login_view = "login"
-login_manager.login_message = "Please Log in!"
+login_manager.login_message = "Log in please!"
 
 db = DB('expenses.db')
 db.create_db()
@@ -44,8 +48,9 @@ def login():
             if user.password == form.password.data:
                 login_user(user)
                 flash('Welcome {}!'.format(user.login))
-
-                return redirect(url_for('index'))
+                app.logger.log(10, 'Logged user {}'.format(user.login))
+                next = request.args.get('next')
+                return redirect(next or url_for('index'))
             else:
                 flash(message='bad login')
     return render_template('login.html', form=form)
@@ -53,12 +58,14 @@ def login():
 
 @app.route('/')
 def index():
+    logging.info('hello')
     return render_template('index.html')
 
 
 @app.route('/hello')
 @login_required
 def user_list():
+    logging.info('DUPA')
     query = session.query(User)
     if 'name' in request.args:
         name = '%{}%'.format(request.args['name'])
@@ -115,9 +122,8 @@ def register():
 @app.route("/logout")
 @login_required
 def logout():
-    flask_login.logout_user()
-    return redirect(url_for("index"))
-
+    logout_user()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

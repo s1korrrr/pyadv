@@ -23,6 +23,7 @@ class RegisterForm(FlaskForm):
             if self.password.data != self.password2.data:
                 is_valid = False
 
+
         return is_valid
 
 
