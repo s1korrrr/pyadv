@@ -1,18 +1,22 @@
-{% extends "main_tpl.html" %}
+{% extends "base.html" %}
 
 {% block title %}Login{% endblock %}
 
 {% block tresc %}
+
 <form method="post">
     {{ form.csrf_token }}
-    <span>Login</span>{{ form.login }}<br>
-    <span>Password</span>{{ form.password}}<br>
-    <button type="submit">Login</button>
+    <span>Name</span>{{ form.login(class_="form-control") }}<br>
+    <span>Password</span>{{ form.password(class_="form-control") }}<br>
+    <button type="submit" class="btn btn-secondary">Login</button>
 </form>
+
+
+
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
-    <ul>
+    <ul class=flashes>
     {% for message in messages %}
       <li>{{ message }}</li>
     {% endfor %}

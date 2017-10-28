@@ -1,21 +1,26 @@
-from flask import Flask, render_template, request,\
-    redirect, url_for, flash, abort
+from flask import Flask, render_template, request, \
+    redirect, url_for, flash, abort, session
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager, \
-    login_required, login_user, logout_user
+    login_required, login_user, logout_user, UserMixin
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm.exc import NoResultFound
 
-from shekels.db import DB, User, Expense
+from passlib.hash import pbkdf2_sha256
+
 from shekels.forms import ExpenseForm, LoginForm, RegisterForm
 
 import logging
 import shekels.logger
+
 shekels.logger.setup()
 
 app = Flask(__name__)
 app.secret_key = 'fdsafhsdalkghsdahg'
-app.debug = False
+app.debug = True
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 toolbar = DebugToolbarExtension(app)
 login_manager = LoginManager()
@@ -23,15 +28,48 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 login_manager.login_message = "Log in please!"
 
-db = DB('expenses.db')
-db.create_db()
+# SQLite database
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../expense2.db'
 
-session = db.get_session()
+# To change user or password change the postgres:postres part
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+pg8000://postgres:dupa@localhost/shekels'
+
+db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String)
+    full_name = db.Column(db.String)
+    password = db.Column(db.String)
+    profile = db.Column(db.String, nullable=True)
+
+    # = db.relationship("Child", back_populates="parent")
+
+    def __str__(self):
+        return "User: {} {}".format(self.login,
+                                    self.full_name)
+
+
+class Expense(db.Model):
+    __tablename__ = 'expense'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    price = db.Column(db.Integer)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+                        nullable=False)
+    user = db.relationship("User", backref="expenses")
 
 
 @login_manager.user_loader
 def load_user(id):
-    return session.query(User).get(id)
+    return db.session.query(User).get(id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -39,13 +77,13 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         try:
-            user = session.query(User).filter(
+            user = db.session.query(User).filter(
                 User.login == form.login.data
             ).one()
         except NoResultFound:
             flash(message='bad login')
         else:
-            if user.password == form.password.data:
+            if pbkdf2_sha256.verify(form.password.data, user.password):
                 login_user(user)
                 flash('Welcome {}!'.format(user.login))
                 app.logger.log(10, 'Logged user {}'.format(user.login))
@@ -66,7 +104,7 @@ def index():
 @login_required
 def user_list():
     logging.info('DUPA')
-    query = session.query(User)
+    query = db.session.query(User)
     if 'name' in request.args:
         name = '%{}%'.format(request.args['name'])
         query = query.filter(User.name.like(name))
@@ -79,7 +117,8 @@ def user_list():
 @app.route('/list')
 @login_required
 def list():
-    expenses = session.query(Expense).all()
+    user_id = session['user_id']
+    expenses = db.session.query(Expense).filter(Expense.user_id == user_id).all()
     return render_template('list.html',
                            expenses=expenses)
 
@@ -93,9 +132,9 @@ def add():
             name=form.name.data,
             price=form.price.data
         )
-        session = db.get_session()
-        session.add(expense)
-        session.commit()
+        expense.user_id = session['user_id']
+        db.session.add(expense)
+        db.session.commit()
         return redirect(url_for('index'))
 
     return render_template('add.html', form=form)
@@ -105,14 +144,14 @@ def add():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        secret = pbkdf2_sha256.hash(form.password.data)
         user = User(
             login=form.login.data,
             full_name=form.full_name.data,
-            password=form.password.data
+            password=secret
         )
-        session = db.get_session()
-        session.add(user)
-        session.commit()
+        db.session.add(user)
+        db.session.commit()
         flash('User registered {}! Please log in.'.format(user.login))
         return redirect(url_for('index'))
 
@@ -124,6 +163,7 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

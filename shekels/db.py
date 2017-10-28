@@ -37,6 +37,7 @@ class User(Base, UserMixin):
     full_name = Column(String)
     password = Column(String)
 
+
     def __str__(self):
         return "User: {} {}".format(self.login,
                                     self.full_name)
@@ -48,3 +49,6 @@ class Expense(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     price = Column(Integer)
+
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship("User", backref="expenses")

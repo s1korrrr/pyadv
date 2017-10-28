@@ -1,0 +1,19 @@
+Praca domowa.
+
+1. Napisać aplikację okienkową która posiada 2 przyciski oraz pole na wpisywanie tekstu.
+Przyciski to:
+quit -> zamyka aplikacje
+save -> otwiera okno wyboru pliku, i po nacisniecu ok, zapisuje zawartosc pola teskstowego do pliku.
+
+
+Przydatne informacje:
+Pole tekstowe
+http://www.tkdocs.com/tutorial/text.html
+
+Okienko wyboru pliku:
+http://www.tkdocs.com/tutorial/windows.html (sekcja Standard Dialogs)
+http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/tkFileDialog.html
+Przyklad w pliku tk14.py :)
+
+2. Zmodyfikować program, aby umial tez otwierac pliku tekstowe. Gdy je otworzy okienko do tekstu sie uzupelnia
+zawartoscia z pliku.

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Nasza strona - {% endblock %}</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+</head>
+<body>
+  {% include '_links.html' %}
+  <main>
+    {% block main %} {% endblock %}
+    <div class="container">
+    {% if current_user.is_authenticated %}
+    <div class="alert alert-success" role="alert">Jesteś zalogowany jako {{ current_user.login }}</div>
+    {% endif %}
+    </div>
+  </main>
+    {% block tresc %}
+    {% endblock %}
+    {% block footer %}
+    {% endblock %}
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+
+</body>
+</html>

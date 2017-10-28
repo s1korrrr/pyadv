@@ -1,22 +1,23 @@
-{% extends "main_tpl.html" %}
-
+{% extends "base.html" %}
 {% block title %}{{ super() }}Index{% endblock %}
-
 {% block tresc %}
 
-    {% include '_kitty.html' %}
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p><b>{{ message }}</b></p>
-            {% endfor %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+{% for message in messages %}
+<p><b>{{ message }}</b></p>
+{% endfor %}
 
-        {% endif %}
-    {% endwith %}
+{% endif %}
+{% endwith %}
 
 
-    {{ super() }}
+{{ super() }}
 
+<h2>Shekels, aplikacja do śledzienia wydatków!</h2>
+<p class="lead">Aplikacja do śledzenia wydatków, aby
+    skorzystać, najpierw się zarejestruj.</p>
+{% include '_money.html' %}
 
 {% endblock %}
