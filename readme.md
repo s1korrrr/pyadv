@@ -1,28 +1,34 @@
-# Shekels - super money app !
+# Shekels - super money app!(Tutorial flask project)
+This will be app for home expenses. App is in development.
 
+### Features:
+* Commandline CLI
+* Web abb in flask
+* Register user
+* Login user
+* Add bootstrap to html
 
-## Python - language
+## Used libraries
 
-Socratica - short course: https://www.youtube.com/playlist?list=PLi01XoE8jYohWFPpC17Z-wWhPOSuh8Er-
+* csv: https://docs.python.org/3.5/library/csv.html
+* argparse: https://docs.python.org/3.5/library/argparse.html
+* pytest: https://docs.pytest.org/en/latest/
+* pytest fixtures: https://docs.pytest.org/en/latest/fixture.html
 
-Interesting python tutorials: https://www.youtube.com/channel/UCI0vQvr9aFn27yR6Ej6n5UA
+# install postgres on linux
 
-Decorators tutorial: https://www.youtube.com/watch?v=9oyr0mocZTg
+https://help.ubuntu.com/community/PostgreSQL
 
-## Python standard library
+sudo apt-get install postgresql
 
-csv: https://docs.python.org/3.5/library/csv.html
+Install postgres client:
+sudo apt-get install postgresql-client
 
-argparse: https://docs.python.org/3.5/library/argparse.html
+marstom@marstom-X55VD /usr/local $ psql
+marstom@marstom-X55VD /usr/local $ sudo su - postgres
 
-## Pytest documentation:
+# how to run...
 
-pytest: https://docs.pytest.org/en/latest/
-
-fixtures: https://docs.pytest.org/en/latest/fixture.html
-
-## Packages
-
-arrow - better datetime: https://pypi.python.org/pypi/arrow
-
-pytest: https://pypi.python.org/pypi/pytest
+python manage.py db init
+python manage.py migrate
+python manage.py upgrade -if you make changes in db

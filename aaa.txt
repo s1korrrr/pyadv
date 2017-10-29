@@ -1,8 +1,0 @@
-Praca domowa.
-
-1. Napisać aplikację okienkową która posiada 2 przyciski oraz pole na wpisywanie tekstu.
-Przyciski to:
-quitklad w pliku tk14.py :)
-
-2. Zmodyfikować program, aby umial tez otwierac pliku tekstowe. Gdy je otworzy okienko do tekstu sie uzupelnia
-zawartoscia z pliku.
